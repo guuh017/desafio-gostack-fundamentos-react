@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import filesize from 'filesize';
+import crypto from 'crypto';
 
 import Header from '../../components/Header';
 import FileList from '../../components/FileList';
@@ -23,19 +24,34 @@ const Import: React.FC = () => {
   const history = useHistory();
 
   async function handleUpload(): Promise<void> {
-    // const data = new FormData();
+    const data = new FormData();
 
-    // TODO
+    uploadedFiles.forEach(file => {
+      data.set(
+        `file`,
+        file.file,
+        `file.name-${crypto.randomBytes(10).toString('HEX')}`,
+      );
+    });
 
     try {
-      // await api.post('/transactions/import', data);
+      await api.post('/transactions/import', data);
+      setUploadedFiles([]);
     } catch (err) {
-      // console.log(err.response.error);
+      console.log(err.response.error);
     }
   }
 
   function submitFile(files: File[]): void {
-    // TODO
+    const newFiles = files.map(file => {
+      return {
+        file,
+        name: file.name,
+        readableSize: filesize(file.size),
+      } as FileProps;
+    });
+
+    setUploadedFiles([...uploadedFiles, ...newFiles]);
   }
 
   return (

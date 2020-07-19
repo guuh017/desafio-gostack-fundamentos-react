@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import { Container } from './styles';
 
@@ -15,9 +15,18 @@ const Header: React.FC<HeaderProps> = ({ size = 'large' }: HeaderProps) => (
     <header>
       <img src={Logo} alt="GoFinances" />
       <nav>
-        {
-          // Todo
-        }
+        <Link
+          to="/"
+          className={useLocation().pathname === '/' ? 'selected' : ''}
+        >
+          Listagem
+        </Link>
+        <Link
+          to="/import"
+          className={useLocation().pathname === '/import' ? 'selected' : ''}
+        >
+          Importar
+        </Link>
       </nav>
     </header>
   </Container>
